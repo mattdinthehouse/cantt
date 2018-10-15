@@ -40,6 +40,8 @@ final class Cantt_Page_Board extends Cantt_Page {
 	}
 
 	public function render() {
-		cantt_partial('board.php', $this->board);
+		cantt_partial('board.php', array(
+			'board' => $this->board
+		));
 	}
 }

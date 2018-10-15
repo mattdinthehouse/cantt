@@ -1,6 +1,6 @@
 <?php
 
-function cantt_partial($path, $this = null, $args = array()) {
+function cantt_partial($path, $args = array()) {
 	extract($args);
 
 	include CANTT_DIR.'/partials/'.$path;

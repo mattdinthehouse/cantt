@@ -7,6 +7,8 @@ final class Cantt_Page_Index extends Cantt_Page {
 	}
 
 	public function render() {
-		cantt_partial('index.php', $this);
+		cantt_partial('index.php', array(
+			'self' => $this,
+		));
 	}
 }

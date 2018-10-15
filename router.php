@@ -36,6 +36,8 @@ ob_start();
 
 		http_response_code($e->getCode());
 
-		cantt_partial('exception.php', $e);
+		cantt_partial('exception.php', array(
+			'exception' => $e,
+		));
 	}
 ob_end_flush();
