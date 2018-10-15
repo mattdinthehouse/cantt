@@ -1,3 +1,1 @@
-<?php
-
-var_dump($this);
+<pre><?php var_dump($this); ?></pre>
