@@ -1,2 +1,2 @@
 # cantt
-Answers the question: Am I overbooked?
+Answers the question: am I overbooked?
