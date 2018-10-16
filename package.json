@@ -1,0 +1,23 @@
+{
+  "name": "cantt",
+  "version": "1.0.0",
+  "description": "Answers the question: am I overbooked?",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattdinthehouse/cantt.git"
+  },
+  "author": "Matt D",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mattdinthehouse/cantt/issues"
+  },
+  "homepage": "https://github.com/mattdinthehouse/cantt#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^6.0.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-postcss": "^8.0.0",
+    "gulp-sass": "^4.0.2",
+    "postcss-object-fit-images": "^1.1.2"
+  }
+}
