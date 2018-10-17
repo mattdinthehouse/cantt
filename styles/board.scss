@@ -5,82 +5,76 @@
 	overflow-x:auto;
 	overflow-y:visible;
 
-	header {
+	&__header {
 		padding:0px 0px 0px 200px;
+	}
 
-		> ul {
-			display:flex;
-			align-items:stretch;
-			justify-content:flex-start;
+	&__header-group {
+		display:flex;
+		align-items:stretch;
+		justify-content:flex-start;
+		margin:0px;
+		padding:0px;
+		list-style:none;
+
+		> li {
+			display:block;
 			margin:0px;
 			padding:0px;
-			list-style:none;
 
-			> li {
-				display:block;
-				margin:0px;
-				padding:0px;
+			+ li {
 				border-left:1px solid #EEE;
+			}
+		}
 
-				> p {
-					margin:0px 0px 10px 0px;
-					padding:0px 0px 0px 5px;
-				}
+		&--minor > li {
+			min-width:30px;
+			padding-left:5px;
+		}
 
-				> ul {
-					display:flex;
-					align-items:stretch;
-					justify-content:flex-start;
-					margin:0px;
-					padding:0px;
-					list-style:none;
-
-					> li {
-						display:block;
-						width:30px;
-						min-width:30px;
-						margin:0px;
-						padding:0px 0px 0px 5px;
-
-						+ li {
-							border-left:1px solid #EEE;
-						}
-					}
-				}
+		&--major {
+			&__title {
+				margin:0px 0px 10px 0px;
+				padding:0px 0px 0px 5px;
 			}
 		}
 	}
 
-	div {
-		> ul {
-			display:block;
-			margin:0px;
-			padding:0px;
-			list-style:none;
+	&__tasks {
+		display:block;
+		margin:0px;
+		padding:0px;
+		list-style:none;
+	}
+}
 
-			> li {
-				display:flex;
-				align-items:center;
-				justify-content:flex-start;
-				margin:0px;
-				padding:0px;
+.board-task {
+	display:flex;
+	align-items:center;
+	justify-content:flex-start;
+	margin:0px;
+	padding:0px;
 
-				> label {
-					position:sticky;
-					left:0px;
-					z-index:1;
-					width:200px;
-					margin:0px;
-					padding:5px;
-					background:#EEE;
-				}
+	&__label {
+		position:sticky;
+		left:0px;
+		z-index:1;
+		width:200px;
+		margin:0px;
+		padding:5px;
+		background:#EEE;
+	}
 
-				> div {
-					position:relative;
-					height:1em;
-					background:#DDD;
-				}
-			}
+	&__item {
+		position:relative;
+		height:1em;
+
+		&--active {
+			background:#CCC;
+		}
+
+		&--inactive {
+			background:#DDD;
 		}
 	}
 }
