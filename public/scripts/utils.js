@@ -21,6 +21,13 @@ function svg(tag, attributes) {
 	return element;
 }
 
+// Empty an element
+function emptyElement(element) {
+	while(element.firstChild) {
+		element.removeChild(element.firstChild);
+	}
+}
+
 // Get the month name out of a Date object
 function dateMonthName(date) {
 	const monthNames = [

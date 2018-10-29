@@ -8,11 +8,25 @@ class Gantt {
 
 		this.scale = 'Days';
 
+		this.tasks = [];
+		this.tasks.push({
+			start: new Date('2018-10-14 00:00:00'),
+			end:   new Date('2018-10-15 12:00:00'),
+			label: 'Birthday + a bit',
+		});
+		this.tasks.push({
+			start: new Date('2018-11-10 11:00:00'),
+			end:   new Date('2018-11-10 17:00:00'),
+			label: 'BBQ with Ben',
+		});
+
 		this.updateScaleParts();
 
 		this.createElements(container);
 
 		this.renderScale();
+
+		this.renderTasks();
 
 		console.log(this);
 	}
@@ -61,9 +75,9 @@ class Gantt {
 			width:    this.calculateScaleUnits(this.startDate, this.endDate) * this.CELL_WIDTH,
 			height:   500,
 		});
-
-		this.layers = {};
 		
+		this.layers = {};
+
 		this.layers.scale = svg('g', {
 			class:    'gantt-scale',
 			appendTo: this.svg,
@@ -76,6 +90,8 @@ class Gantt {
 	}
 
 	renderScale() {
+		emptyElement(this.layers.scale);
+
 		let offsetLeft = 0;
 		let offsetTop  = this.CELL_HEIGHT * 0.5;
 
@@ -124,6 +140,29 @@ class Gantt {
 				break;
 		}
 
-		return units.toFixed(0);
+		return Math.ceil(units);
+	}
+
+	renderTasks() {
+		emptyElement(this.layers.tasks);
+
+		let offsetLeft = 0;
+		let offsetTop  = this.CELL_HEIGHT * 2;
+
+		this.tasks.forEach(function(task, taskIndex) {
+			var bar = svg('g', {
+				appendTo: this.layers.tasks,
+			});
+
+			svg('rect', {
+				appendTo:         bar,
+				x:                offsetLeft + (this.calculateScaleUnits(this.startDate, task.start) * this.CELL_WIDTH),
+				y:                offsetTop + (taskIndex * this.CELL_HEIGHT),
+				width:            this.calculateScaleUnits(task.start, task.end) * this.CELL_WIDTH,
+				height:           this.CELL_HEIGHT,
+				fill:             '#000000',
+				'fill-opacity':   0.1,
+			});
+		}, this);
 	}
 }
