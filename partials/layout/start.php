@@ -13,5 +13,8 @@ $doc_title = (!empty($doc_title) ? $doc_title.' - '.CANTT_DOC_TITLE : CANTT_DOC_
 
 	<link rel="stylesheet" href="/styles/global.css"/>
 	<link rel="stylesheet" href="/styles/board.css"/>
+
+	<script src="/scripts/utils.js"></script>
+	<script src="/scripts/gantt.js"></script>
 </head>
 <body>
