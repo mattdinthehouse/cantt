@@ -9,10 +9,10 @@ class Gantt {
 		this.scaleType = 'Days';
 
 		this.svg = svg('svg', {
-			class:    'gantt',
-			appendTo: container,
-			width:    this.calculateScaleUnits(this.startDate, this.endDate) * this.CELL_WIDTH,
-			height:   500,
+			'class':    'gantt',
+			'appendTo': container,
+			'width':    this.calculateScaleUnits(this.startDate, this.endDate) * this.CELL_WIDTH,
+			'height':   500,
 		});
 
 		this.scale = new GanttScale(this);
@@ -110,25 +110,25 @@ class GanttScale {
 			});
 
 			svg('text', {
-				innerHTML: major.label,
-				appendTo:  majorGroup,
-				x:         offsetLeft,
-				y:         offsetTop,
-				height:    this.gantt.CELL_HEIGHT,
+				'innerHTML': major.label,
+				'appendTo':  majorGroup,
+				'x':         offsetLeft,
+				'y':         offsetTop,
+				'height':    this.gantt.CELL_HEIGHT,
 			});
 
 			major.items.forEach(function(minor, minorIndex) {
 				const minorGroup = svg('g', {
-					appendTo: majorGroup,
+					'appendTo': majorGroup,
 				});
 
 				svg('text', {
-					innerHTML: minor,
-					appendTo:  minorGroup,
-					x:         offsetLeft + (minorIndex * this.gantt.CELL_WIDTH),
-					y:         offsetTop + this.gantt.CELL_HEIGHT,
-					width:     this.gantt.CELL_WIDTH,
-					height:    this.gantt.CELL_HEIGHT,
+					'innerHTML': minor,
+					'appendTo':  minorGroup,
+					'x':         offsetLeft + (minorIndex * this.gantt.CELL_WIDTH),
+					'y':         offsetTop + this.gantt.CELL_HEIGHT,
+					'width':     this.gantt.CELL_WIDTH,
+					'height':    this.gantt.CELL_HEIGHT,
 				});
 			}, this);
 
@@ -172,16 +172,16 @@ class GanttTasks {
 
 		this.tasks.forEach(function(task, taskIndex) {
 			var bar = svg('g', {
-				appendTo: this.element,
+				'appendTo': this.element,
 			});
 
 			svg('rect', {
-				appendTo:         bar,
-				x:                offsetLeft + (this.gantt.calculateScaleUnits(this.gantt.startDate, task.start) * this.gantt.CELL_WIDTH),
-				y:                offsetTop + (taskIndex * this.gantt.CELL_HEIGHT),
-				width:            this.gantt.calculateScaleUnits(task.start, task.end) * this.gantt.CELL_WIDTH,
-				height:           this.gantt.CELL_HEIGHT,
-				fill:             '#000000',
+				'appendTo':         bar,
+				'x':                offsetLeft + (this.gantt.calculateScaleUnits(this.gantt.startDate, task.start) * this.gantt.CELL_WIDTH),
+				'y':                offsetTop + (taskIndex * this.gantt.CELL_HEIGHT),
+				'width':            this.gantt.calculateScaleUnits(task.start, task.end) * this.gantt.CELL_WIDTH,
+				'height':           this.gantt.CELL_HEIGHT,
+				'fill':             '#000000',
 				'fill-opacity':   0.1,
 			});
 		}, this);
