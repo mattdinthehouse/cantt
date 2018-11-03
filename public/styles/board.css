@@ -1,3 +1,5 @@
 .board {
   position: relative;
   overflow: auto; }
+  .board text {
+    dominant-baseline: hanging; }
