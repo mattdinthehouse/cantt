@@ -3,7 +3,7 @@ class Gantt {
 		this.CELL_WIDTH  = 32;
 		this.CELL_HEIGHT = 32;
 
-		this.startDate = new Date('2018-11-01 00:00:00');
+		this.startDate = new Date('2018-11-09 00:00:00');
 		this.endDate   = new Date('2019-01-31 23:59:59');
 
 		this.scaleType = 'Hours';
@@ -17,7 +17,7 @@ class Gantt {
 
 		this.scale = new GanttScale(this);
 
-		this.tasks = new GanttTasks(this);
+		this.tasks = new GanttTaskList(this);
 
 		this.update();
 
@@ -137,7 +137,7 @@ class GanttScale {
 	}
 }
 
-class GanttTasks {
+class GanttTaskList {
 	constructor(gantt) {
 		this.gantt = gantt;
 
@@ -148,30 +148,49 @@ class GanttTasks {
 
 		this.tasks = [];
 
-		this.tasks.push({
-			label: 'BBQ with Ben',
-			subtasks: [ // TODO: Need to sort these into the right order when they're added
-				{
-					start: new Date('2018-11-09 18:00:00'),
-					end:   new Date('2018-11-09 18:30:00'),
-					label: 'Get gas bottle back from Mum',
-				},
-				{
-					start: new Date('2018-11-09 18:45:00'),
-					end:   new Date('2018-11-09 19:30:00'),
-					label: 'Get food from supermarket',
-				},
-				{
-					start: new Date('2018-11-10 11:30:00'),
-					end:   new Date('2018-11-10 17:30:00'),
-					label: 'BBQ time!!',
-				},
+		this.tasks.push(new GanttTask(this.gantt, {
+			startDate: new Date('2018-11-09 18:00:00'),
+			endDate:   new Date('2018-11-10 17:30:00'),
+			label:     'BBQ with Ben',
+			subtasks:  [
+				new GanttTask(this.gantt, {
+					startDate: new Date('2018-11-09 18:00:00'),
+					endDate:   new Date('2018-11-09 19:30:00'),
+					label:     'Get stuff',
+					subtasks:  [
+						new GanttTask(this.gantt, {
+							startDate: new Date('2018-11-09 18:00:00'),
+							endDate:   new Date('2018-11-09 18:30:00'),
+							label:     'Get gas bottle from mum',
+							subtasks:  [
+							],
+						}),
+						new GanttTask(this.gantt, {
+							startDate: new Date('2018-11-09 18:45:00'),
+							endDate:   new Date('2018-11-09 19:30:00'),
+							label:     'Get food from supermarket',
+							subtasks:  [
+							],
+						}),
+					],
+				}),
+				new GanttTask(this.gantt, {
+					startDate: new Date('2018-11-10 11:30:00'),
+					endDate:   new Date('2018-11-10 17:30:00'),
+					label:     'BBQ time!!',
+					subtasks:  [
+					],
+				}),
 			],
-		});
+		}));
 	}
 
 	update() {
 		this.renderTasks();
+
+		this.tasks.forEach(function(task) {
+			task.update();
+		});
 	}
 
 	renderTasks() {
@@ -180,48 +199,62 @@ class GanttTasks {
 		let offsetLeft = 0;
 		let offsetTop  = this.gantt.CELL_HEIGHT * 2;
 
-		this.tasks.forEach(function(task, taskIndex) {
-			const bar = svg('g', {
-				'appendTo': this.element,
-			});
-
-			const firstTask = task.subtasks[0];
-			const lastTask  = task.subtasks[task.subtasks.length - 1];
-
-			const taskOffsetTop  = offsetTop + (taskIndex * this.gantt.CELL_HEIGHT);
-			const taskOffsetLeft = offsetLeft + (this.gantt.calculateScaleUnits(this.gantt.startDate, firstTask.start) * this.gantt.CELL_WIDTH);
-
-			svg('rect', {
-				'appendTo':    bar,
-				'x':           taskOffsetLeft,
-				'y':           taskOffsetTop,
-				'width':       this.gantt.calculateScaleUnits(firstTask.start, lastTask.end) * this.gantt.CELL_WIDTH,
-				'height':      this.gantt.CELL_HEIGHT,
-				'fill':        '#000000',
-				'fill-opacity': 0.1,
-			});
-
-			svg('text', {
-				'innerHTML': task.label,
-				'appendTo':  bar,
-				'x':         taskOffsetLeft + 2,
-				'y':         taskOffsetTop + 2,
-			});
-
-			task.subtasks.forEach(function(subtask) {
-				const subtaskOffsetLeft = taskOffsetLeft + (this.gantt.calculateScaleUnits(firstTask.start, subtask.start) * this.gantt.CELL_WIDTH);
-				const subtaskOffsetTop  = taskOffsetTop + (this.gantt.CELL_HEIGHT / 2);
-
-				svg('rect', {
-					'appendTo':     bar,
-					'x':            subtaskOffsetLeft + 2,
-					'y':            subtaskOffsetTop + 2,
-					'width':        (this.gantt.calculateScaleUnits(subtask.start, subtask.end) * this.gantt.CELL_WIDTH) - 4,
-					'height':       (this.gantt.CELL_HEIGHT / 2) - 4,
-					'fill':        '#000000',
-					'fill-opacity': 0.1,
-				});
-			}, this);
+		this.tasks.forEach(function(task) {
+			task.render(this.element, 0, offsetLeft, offsetTop);
 		}, this);
+	}
+}
+
+class GanttTask {
+	constructor(gantt, data) {
+		this.gantt = gantt;
+
+		Object.entries(data).forEach(function(datum) {
+			this[datum[0]] = datum[1];
+		}, this);
+	}
+
+	update() {
+		this.subtasks.forEach(function(subtask) {
+			subtask.update();
+		});
+	}
+
+	render(element, depth, offsetLeft, offsetTop) {
+		const indent = 3;
+
+		const x = offsetLeft + (this.gantt.calculateScaleUnits(this.gantt.startDate, this.startDate) * this.gantt.CELL_WIDTH);
+		const y = offsetTop;
+
+		let width  = this.gantt.calculateScaleUnits(this.startDate, this.endDate) * this.gantt.CELL_WIDTH;
+		let height = this.gantt.CELL_HEIGHT;
+
+		if(depth == 1) {
+			// Ensure the first level's subtasks are at least visible so the user can see they exist
+			width = Math.max(width, ((indent * 2) + 2));
+		}
+
+		svg('rect', {
+			'appendTo':       element,
+			'x':              x + (depth * indent),
+			'y':              offsetTop + (depth * indent),
+			'width':          width - (depth * (indent * 2)),
+			'height':         this.gantt.CELL_HEIGHT - (depth * (indent * 2)),
+			'fill':           'black',
+			'fill-opacity':   0.08,
+		});
+
+		if(depth == 0 || width > (depth * (indent * 2))) {
+			// Maybe render subtasks if it's the first level or there's enough space
+			if(this.subtasks.length) {
+				const subtasksElement = svg('g', {
+					'appendTo': element,
+				});
+
+				this.subtasks.forEach(function(subtask) {
+					subtask.render(subtasksElement, depth + 1, offsetLeft, offsetTop);
+				});
+			}
+		}
 	}
 }
